@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main id="main-content">
+    <div class="page-hero">
+      <h1>Server</h1>
+      <p>Join the Better Bedwars Minecraft server and play with the community.</p>
+    </div>
+
+    <section class="section">
+      <div class="server-status-card" id="server-status">
+        <!-- Status Header -->
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+          <span class="server-online-dot <%= serverStatus.online ? 'online' : 'offline' %>" id="status-dot"></span>
+          <span style="font-family: 'Space Mono', monospace; font-size: 14px; color: #999;" id="status-text">
+            <%= serverStatus.online ? 'Online' : 'Offline' %>
+          </span>
+        </div>
+
+        <!-- Player Count -->
+        <div style="margin-bottom: 24px;">
+          <p class="section-title">Players Online</p>
+          <div class="server-players" id="player-count">
+            <%= serverStatus.players.online %><span style="font-size: 0.5em; color: #555;"> / <%= serverStatus.players.max %></span>
+          </div>
+        </div>
+
+        <!-- Server IP -->
+        <div style="margin-bottom: 24px;">
+          <p class="section-title">Server Address</p>
+          <div class="server-ip" onclick="copyServerIP()" title="Click to copy" id="server-ip">
+            <%= serverStatus.host %>:<%= serverStatus.port %>
+          </div>
+          <p style="font-size: 12px; color: #555; margin-top: 8px;">Click to copy</p>
+        </div>
+
+        <!-- Server Details -->
+        <div>
+          <div class="server-detail">
+            <span class="server-detail-label">Version</span>
+            <span class="server-detail-value" id="server-version"><%= serverStatus.version %></span>
+          </div>
+          <div class="server-detail">
+            <span class="server-detail-label">Host</span>
+            <span class="server-detail-value"><%= serverStatus.host %></span>
+          </div>
+          <div class="server-detail">
+            <span class="server-detail-label">Port</span>
+            <span class="server-detail-value"><%= serverStatus.port %></span>
+          </div>
+          <% if (serverStatus.motd) { %>
+          <div class="server-detail">
+            <span class="server-detail-label">MOTD</span>
+            <span class="server-detail-value"><%= serverStatus.motd %></span>
+          </div>
+          <% } %>
+          <div class="server-detail">
+            <span class="server-detail-label">Last Checked</span>
+            <span class="server-detail-value"><%= serverStatus.lastChecked ? new Date(serverStatus.lastChecked).toLocaleTimeString() : 'Unknown' %></span>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: 16px; font-size: 12px; color: #444;">Status auto-refreshes every 30 seconds</p>
+    </section>
+
+    <!-- Server Features -->
+    <section class="section">
+      <p class="section-title">Features</p>
+      <h2 class="section-heading">What We Offer</h2>
+      <div class="packs-grid">
+        <div class="pack-card">
+          <div class="pack-card-body">
+            <h3 class="pack-card-title">Bedwars</h3>
+            <p class="pack-card-desc">Competitive Bedwars with custom game modes, ranked matches, and seasonal events.</p>
+          </div>
+        </div>
+        <div class="pack-card">
+          <div class="pack-card-body">
+            <h3 class="pack-card-title">Community</h3>
+            <p class="pack-card-desc">Active community with Discord integration, regular events, and a friendly player base.</p>
+          </div>
+        </div>
+        <div class="pack-card">
+          <div class="pack-card-body">
+            <h3 class="pack-card-title">Custom Textures</h3>
+            <p class="pack-card-desc">The server is optimized for use with Better Bedwars texture pack for the best experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rules -->
+    <section class="section">
+      <p class="section-title">Rules</p>
+      <h2 class="section-heading">Server Rules</h2>
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">1. Be Respectful</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Treat all players with respect. Harassment, hate speech, and toxicity will not be tolerated.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">2. No Cheating</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Use of hacks, exploits, or unfair advantages will result in an immediate ban.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">3. No Griefing</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Do not grief other players' builds or deliberately ruin the game experience for others.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">4. Follow Staff Instructions</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Server staff decisions are final. Follow their instructions at all times.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <script src="/js/main.js"></script>
+  <script>
+    // Auto-refresh server status
+    function refreshServerStatus() {
+      fetch('/server/status')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var dot = document.getElementById('status-dot');
+          var text = document.getElementById('status-text');
+          var players = document.getElementById('player-count');
+          var version = document.getElementById('server-version');
+          
+          if (dot) {
+            dot.className = 'server-online-dot ' + (data.online ? 'online' : 'offline');
+          }
+          if (text) {
+            text.textContent = data.online ? 'Online' : 'Offline';
+          }
+          if (players) {
+            players.innerHTML = data.players.online + '<span style="font-size: 0.5em; color: #555;"> / ' + data.players.max + '</span>';
+          }
+          if (version && data.version) {
+            version.textContent = data.version;
+          }
+        })
+        .catch(function(e) { /* Silently fail */ });
+    }
+    setInterval(refreshServerStatus, 30000);
+
+    function copyServerIP() {
+      var ip = document.getElementById('server-ip').textContent.trim();
+      navigator.clipboard.writeText(ip).then(function() {
+        var el = document.getElementById('server-ip');
+        var original = el.textContent;
+        el.textContent = 'Copied!';
+        setTimeout(function() { el.textContent = original; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>

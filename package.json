@@ -1,0 +1,36 @@
+{
+  "name": "betterbedwars-website",
+  "version": "1.0.0",
+  "description": "Official Better Bedwars website - A modern Node.js backend for the Better Bedwars texture pack project",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "setup": "node src/utils/setup.js",
+    "refresh": "node src/utils/refresh.js"
+  },
+  "keywords": [
+    "minecraft",
+    "texture-pack",
+    "bedwars",
+    "pvp"
+  ],
+  "author": "Better Bedwars",
+  "license": "MIT",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "marked": "^14.0.0",
+    "node-fetch": "^2.7.0",
+    "sanitize-html": "^2.13.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

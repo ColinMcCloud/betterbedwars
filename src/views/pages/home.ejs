@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Better Bedwars<span>.</span></h1>
+      <p>A 1.8.9 PVP Texture Pack! We make Bedwars, better.</p>
+      <div class="download-links mt-4">
+        <a href="/downloads" class="download-btn download-btn-primary">Download Now</a>
+        <a href="/packs" class="download-btn">Browse Packs</a>
+      </div>
+    </section>
+
+    <% if (globalStats && globalStats.totalDownloads > 0) { %>
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number"><%= globalStats.totalDownloadsFormatted %></div>
+        <div class="stat-label">Total Downloads</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= globalStats.totalPacks %></div>
+        <div class="stat-label">Texture Packs</div>
+      </div>
+      <% if (globalStats.byPlatformFormatted) { %>
+        <% for (const [platform, count] of Object.entries(globalStats.byPlatformFormatted)) { %>
+      <div class="stat-item">
+        <div class="stat-number"><%= count %></div>
+        <div class="stat-label"><%= platform.charAt(0).toUpperCase() + platform.slice(1) %></div>
+      </div>
+        <% } %>
+      <% } %>
+    </section>
+    <% } %>
+
+    <!-- Feature Highlights -->
+    <section class="section">
+      <p class="section-title">Why Better Bedwars</p>
+      <h2 class="section-heading">Built for Competitive Play</h2>
+      <p class="section-subtitle">Every detail is crafted to give you an edge in Bedwars. Clean visuals, optimized performance, and a design focused on competitive advantage.</p>
+
+      <div class="packs-grid">
+        <div class="pack-card">
+          <div class="pack-card-body">
+            <h3 class="pack-card-title">Clean PVP Design</h3>
+            <p class="pack-card-desc">Minimal visual noise with high-contrast elements that help you spot opponents and blocks quickly in intense Bedwars matches.</p>
+          </div>
+        </div>
+        <div class="pack-card">
+          <div class="pack-card-body">
+            <h3 class="pack-card-title">Optimized Performance</h3>
+            <p class="pack-card-desc">Lightweight textures designed for maximum FPS. Maintain smooth gameplay even on lower-end hardware.</p>
+          </div>
+        </div>
+        <div class="pack-card">
+          <div class="pack-card-body">
+            <h3 class="pack-card-title">Java & Bedrock</h3>
+            <p class="pack-card-desc">Available for both Minecraft Java Edition and Bedrock Edition. Play with Better Bedwars regardless of your platform.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Packs -->
+    <% if (featuredPacks && featuredPacks.length > 0) { %>
+    <section class="section" style="background: #0a0a0a; max-width: none; padding-left: 32px; padding-right: 32px;">
+      <div style="max-width: 1100px; margin: 0 auto;">
+        <p class="section-title">Featured</p>
+        <h2 class="section-heading">Our Texture Packs</h2>
+        <p class="section-subtitle">Browse our collection of carefully crafted texture packs for Minecraft.</p>
+
+        <div class="packs-grid">
+          <% featuredPacks.forEach(function(pack) { 
+            var slug = pack.slug || pack.name.toLowerCase().replace(/\s+/g, '-');
+          %>
+          <div class="pack-card">
+            <% if (pack.thumbnail) { %>
+            <div class="pack-card-image">
+              <img src="<%= pack.thumbnail %>" alt="<%= pack.name %>" loading="lazy">
+            </div>
+            <% } else { %>
+            <div class="pack-card-image">
+              <div class="pack-card-placeholder"><%= pack.name %></div>
+            </div>
+            <% } %>
+            <div class="pack-card-body">
+              <h3 class="pack-card-title"><%= pack.name %></h3>
+              <p class="pack-card-desc"><%= truncate(pack.short_description || pack.description || '', 120) %></p>
+              <div class="pack-card-meta">
+                <span><%= pack.edition ? pack.edition.join(', ') : 'Java' %></span>
+                <% if (pack.supported_versions) { %>
+                <span>v<%= pack.supported_versions[0] || '1.8.9' %></span>
+                <% } %>
+              </div>
+              <a href="/packs/<%= slug %>" class="pack-card-link">View Details</a>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- Download Section -->
+    <section class="section text-center">
+      <p class="section-title">Get Started</p>
+      <h2 class="section-heading">Download Better Bedwars</h2>
+      <p class="section-subtitle" style="margin-left: auto; margin-right: auto;">Available on multiple platforms. Choose your preferred download source.</p>
+      
+      <div class="download-links" style="justify-content: center;">
+        <a href="https://www.curseforge.com/minecraft/texture-packs/betterbedwars" target="_blank" rel="noopener" class="download-btn download-btn-primary">CurseForge</a>
+        <a href="https://modrinth.com/resourcepack/betterbedwars" target="_blank" rel="noopener" class="download-btn">Modrinth</a>
+        <a href="https://www.planetminecraft.com/texture-pack/betterbedwars/" target="_blank" rel="noopener" class="download-btn">PlanetMinecraft</a>
+      </div>
+    </section>
+
+    <!-- FAQ Preview -->
+    <section class="section">
+      <p class="section-title">FAQ</p>
+      <h2 class="section-heading">Frequently Asked Questions</h2>
+      
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">What Minecraft version is Better Bedwars for?</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Better Bedwars is designed for Minecraft 1.8.9 and works with most modern versions of Minecraft Java Edition. We also have a Bedrock Edition available.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">Is Better Bedwars free?</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Yes, Better Bedwars is completely free to download and use. You can find it on CurseForge, Modrinth, and PlanetMinecraft.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">How do I install the texture pack?</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Download the .zip file from your preferred platform, open Minecraft, go to Options > Resource Packs > Open Pack Folder, and drag the .zip file into the folder. Then activate it in-game.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community / CTA -->
+    <section class="section-full" style="background: #0a0a0a; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a;">
+      <div class="section text-center">
+        <p class="section-title">Community</p>
+        <h2 class="section-heading">Join the Better Bedwars Community</h2>
+        <p class="section-subtitle" style="margin-left: auto; margin-right: auto;">Connect with other players, get support, and stay updated with the latest news.</p>
+        <div class="download-links" style="justify-content: center;">
+          <a href="<%= social.discord %>" target="_blank" rel="noopener" class="download-btn download-btn-primary">Join Discord</a>
+          <a href="<%= social.youtube %>" target="_blank" rel="noopener" class="download-btn">YouTube</a>
+          <a href="<%= social.twitter %>" target="_blank" rel="noopener" class="download-btn">Twitter</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

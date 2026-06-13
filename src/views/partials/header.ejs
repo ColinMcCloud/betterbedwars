@@ -1,0 +1,19 @@
+<header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <div class="nav-inner">
+        <a href="/" class="nav-brand">Better Bedwars<span>.</span></a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a></li>
+          <li><a href="/downloads" class="<%= currentPath === '/downloads' ? 'active' : '' %>">Downloads</a></li>
+          <li><a href="/packs" class="<%= currentPath.startsWith('/packs') ? 'active' : '' %>">Packs</a></li>
+          <li><a href="/server" class="<%= currentPath === '/server' ? 'active' : '' %>">Server</a></li>
+          <li><a href="/contact" class="<%= currentPath === '/contact' ? 'active' : '' %>">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>

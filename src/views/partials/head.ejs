@@ -1,0 +1,44 @@
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Better Bedwars' %></title>
+  <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'A 1.8.9 PVP Texture Pack! We make Bedwars, better.' %>">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'Better Bedwars' %>">
+  <meta property="og:description" content="<%= typeof description !== 'undefined' ? description : 'A 1.8.9 PVP Texture Pack! We make Bedwars, better.' %>">
+  <meta property="og:site_name" content="Better Bedwars">
+  <meta property="og:url" content="<%= site.url %><%= currentPath %>">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'Better Bedwars' %>">
+  <meta name="twitter:description" content="<%= typeof description !== 'undefined' ? description : 'A 1.8.9 PVP Texture Pack! We make Bedwars, better.' %>">
+  
+  <!-- Canonical -->
+  <link rel="canonical" href="<%= site.url %><%= currentPath %>">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon-16x16.ico" sizes="16x16">
+  <link rel="icon" type="image/x-icon" href="/favicon-32x32.ico" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <% if (typeof config !== 'undefined' && config.analytics && config.analytics.trackingId) { %>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= config.analytics.trackingId %>"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '<%= config.analytics.trackingId %>');
+  </script>
+  <% } %>

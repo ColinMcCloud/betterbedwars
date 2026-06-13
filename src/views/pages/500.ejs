@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main id="main-content">
+    <div class="error-page">
+      <div class="error-code">500</div>
+      <p class="error-message">An internal server error occurred.</p>
+      <% if (typeof error !== 'undefined' && error) { %>
+      <p style="font-size: 13px; color: #555; margin-bottom: 24px; font-family: 'Space Mono', monospace;"><%= error %></p>
+      <% } %>
+      <a href="/" class="error-link">Go Home</a>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

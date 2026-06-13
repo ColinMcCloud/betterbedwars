@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main id="main-content">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="/">Home</a> <span>/</span>
+      <a href="/packs">Packs</a> <span>/</span>
+      <span><%= pack.name %></span>
+    </div>
+
+    <!-- Pack Header -->
+    <section class="section">
+      <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+          <h1 class="section-heading" style="font-size: 2.5em;"><%= pack.name %></h1>
+          <p class="text-muted mb-3"><%= pack.short_description || pack.description || '' %></p>
+          
+          <% if (pack.supported_versions) { %>
+          <p class="text-muted mb-2" style="font-size: 13px;">
+            <% pack.supported_versions.forEach(function(v) { %>
+            <span class="platform-pill">v<%= v %></span>
+            <% }); %>
+            <% if (pack.edition) { pack.edition.forEach(function(ed) { %>
+            <span class="platform-pill"><%= ed %></span>
+            <% }); } %>
+          </p>
+          <% } %>
+
+          <div class="download-links">
+            <% if (pack.links) { %>
+              <% if (pack.links.curseforge) { %>
+              <a href="<%= pack.links.curseforge %>" target="_blank" rel="noopener" class="download-btn download-btn-primary">CurseForge</a>
+              <% } %>
+              <% if (pack.links.modrinth) { %>
+              <a href="<%= pack.links.modrinth %>" target="_blank" rel="noopener" class="download-btn">Modrinth</a>
+              <% } %>
+              <% if (pack.links.planetminecraft) { %>
+              <a href="<%= pack.links.planetminecraft %>" target="_blank" rel="noopener" class="download-btn">PlanetMinecraft</a>
+              <% } %>
+              <% if (pack.links.mcpedl) { %>
+              <a href="<%= pack.links.mcpedl %>" target="_blank" rel="noopener" class="download-btn">MCPEDL</a>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+
+        <% if (pack.thumbnail) { %>
+        <div style="flex: 0 0 400px; max-width: 100%;">
+          <img src="<%= pack.thumbnail %>" alt="<%= pack.name %>" style="border-radius: 8px; border: 1px solid #2a2a2a;" loading="lazy">
+        </div>
+        <% } %>
+      </div>
+    </section>
+
+    <% if (packStats) { %>
+    <!-- Download Statistics -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number"><%= packStats.totalFormatted %></div>
+        <div class="stat-label">Total Downloads</div>
+      </div>
+      <% for (const [platform, data] of Object.entries(packStats.platforms)) { %>
+      <div class="stat-item">
+        <div class="stat-number"><%= data.downloadsFormatted %></div>
+        <div class="stat-label"><%= platform.charAt(0).toUpperCase() + platform.slice(1) %></div>
+      </div>
+      <% } %>
+    </section>
+    <% } %>
+
+    <!-- Description -->
+    <% if (pack.description) { %>
+    <section class="section">
+      <p class="section-title">About</p>
+      <h2 class="section-heading">Description</h2>
+      <div style="font-size: 15px; color: #999; line-height: 1.8; max-width: 800px;">
+        <%= pack.description %>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- Gallery -->
+    <% if (pack.gallery && pack.gallery.length > 0) { %>
+    <section class="section">
+      <p class="section-title">Gallery</p>
+      <h2 class="section-heading">Screenshots</h2>
+      <div class="gallery-grid">
+        <% pack.gallery.forEach(function(img) { %>
+        <div class="gallery-item">
+          <img src="<%= img %>" alt="Screenshot" loading="lazy">
+        </div>
+        <% }); %>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- Other Websites -->
+    <% if (pack.other_websites && Object.keys(pack.other_websites).length > 0) { %>
+    <section class="section">
+      <p class="section-title">Other Links</p>
+      <h2 class="section-heading">Download From Other Sites</h2>
+      <div class="download-links">
+        <% for (const [name, url] of Object.entries(pack.other_websites)) { %>
+        <a href="<%= url %>" target="_blank" rel="noopener" class="download-btn"><%= name %></a>
+        <% } %>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- Installation Guide -->
+    <section class="section">
+      <p class="section-title">Installation</p>
+      <h2 class="section-heading">How to Install</h2>
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">Java Edition</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">
+              <ol style="list-style: decimal; padding-left: 20px; color: #999; line-height: 2;">
+                <li>Download the texture pack from your preferred platform.</li>
+                <li>Open Minecraft and go to Options > Resource Packs.</li>
+                <li>Click "Open Pack Folder".</li>
+                <li>Drag the downloaded .zip file into the folder.</li>
+                <li>Go back to Minecraft and activate the pack.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">Bedrock Edition</button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">
+              <ol style="list-style: decimal; padding-left: 20px; color: #999; line-height: 2;">
+                <li>Download the texture pack from CurseForge or MCPEDL.</li>
+                <li>Open the .mcpack file (it should auto-import).</li>
+                <li>Go to Settings > Global Resources > My Packs.</li>
+                <li>Activate the pack.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Packs -->
+    <% if (relatedPacks && relatedPacks.length > 0) { %>
+    <section class="section" style="background: #0a0a0a; max-width: none; padding-left: 32px; padding-right: 32px;">
+      <div style="max-width: 1100px; margin: 0 auto;">
+        <p class="section-title">Related</p>
+        <h2 class="section-heading">Other Packs</h2>
+        <div class="packs-grid">
+          <% relatedPacks.forEach(function(rp) { 
+            var slug = rp.slug || rp.name.toLowerCase().replace(/\s+/g, '-');
+          %>
+          <div class="pack-card">
+            <div class="pack-card-body">
+              <h3 class="pack-card-title"><%= rp.name %></h3>
+              <p class="pack-card-desc"><%= truncate(rp.short_description || rp.description || '', 100) %></p>
+              <a href="/packs/<%= slug %>" class="pack-card-link">View Details</a>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </section>
+    <% } %>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

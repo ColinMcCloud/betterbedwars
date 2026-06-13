@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main id="main-content">
+    <div class="page-hero">
+      <h1>Admin Dashboard</h1>
+      <p>Manage the Better Bedwars website.</p>
+    </div>
+
+    <section class="section">
+      <!-- Cache Stats -->
+      <p class="section-title">System</p>
+      <h2 class="section-heading">Cache Statistics</h2>
+      <div class="admin-grid">
+        <div class="admin-card">
+          <p class="admin-card-label">Total Cached Entries</p>
+          <div class="admin-card-value"><%= cacheStats.total %></div>
+        </div>
+        <div class="admin-card">
+          <p class="admin-card-label">Valid Entries</p>
+          <div class="admin-card-value" style="color: #4ade80;"><%= cacheStats.valid %></div>
+        </div>
+        <div class="admin-card">
+          <p class="admin-card-label">Expired Entries</p>
+          <div class="admin-card-value" style="color: #ef4444;"><%= cacheStats.expired %></div>
+        </div>
+        <div class="admin-card">
+          <p class="admin-card-label">Total Packs</p>
+          <div class="admin-card-value"><%= packs.length %></div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display: flex; gap: 12px; margin-bottom: 40px;">
+        <button class="admin-btn" onclick="refreshData()">Refresh Data</button>
+        <button class="admin-btn admin-btn-danger" onclick="clearCache()">Clear Cache</button>
+      </div>
+
+      <div id="admin-message" style="display: none; margin-bottom: 20px;"></div>
+
+      <!-- Global Stats -->
+      <% if (globalStats) { %>
+      <p class="section-title">Statistics</p>
+      <h2 class="section-heading">Global Statistics</h2>
+      <div class="admin-grid">
+        <div class="admin-card">
+          <p class="admin-card-label">Total Downloads</p>
+          <div class="admin-card-value"><%= globalStats.totalDownloadsFormatted %></div>
+        </div>
+        <div class="admin-card">
+          <p class="admin-card-label">Total Packs</p>
+          <div class="admin-card-value"><%= globalStats.totalPacks %></div>
+        </div>
+        <% if (globalStats.byPlatformFormatted) { %>
+          <% for (const [platform, count] of Object.entries(globalStats.byPlatformFormatted)) { %>
+        <div class="admin-card">
+          <p class="admin-card-label"><%= platform.charAt(0).toUpperCase() + platform.slice(1) %></p>
+          <div class="admin-card-value"><%= count %></div>
+        </div>
+          <% } %>
+        <% } %>
+      </div>
+      <% } %>
+
+      <!-- Pack List -->
+      <p class="section-title">Packs</p>
+      <h2 class="section-heading">All Packs</h2>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <thead>
+            <tr style="border-bottom: 1px solid #2a2a2a;">
+              <th style="text-align: left; padding: 12px 0; font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #555;">ID</th>
+              <th style="text-align: left; padding: 12px 16px; font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #555;">Name</th>
+              <th style="text-align: left; padding: 12px 16px; font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #555;">Slug</th>
+              <th style="text-align: left; padding: 12px 16px; font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #555;">Edition</th>
+              <th style="text-align: left; padding: 12px 16px; font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #555;">Featured</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% packs.forEach(function(pack) { %>
+            <tr style="border-bottom: 1px solid #1a1a1a;">
+              <td style="padding: 12px 0; color: #666; font-family: 'Space Mono', monospace;"><%= pack.id %></td>
+              <td style="padding: 12px 16px; color: #ccc;"><%= pack.name %></td>
+              <td style="padding: 12px 16px; color: #888; font-family: 'Space Mono', monospace; font-size: 12px;"><%= pack.slug || 'N/A' %></td>
+              <td style="padding: 12px 16px; color: #888;"><%= pack.edition ? pack.edition.join(', ') : 'N/A' %></td>
+              <td style="padding: 12px 16px; color: #555;"><% if (pack.featured) { %><span style="color: #4ade80;">Yes</span><% } else { %>No<% } %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <script src="/js/main.js"></script>
+  <script>
+    var adminKey = '<%= adminKey %>';
+    
+    function refreshData() {
+      showMessage('Refreshing data...', 'info');
+      fetch('/admin/refresh?key=' + adminKey, { method: 'POST' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            showMessage('Data refreshed successfully!', 'success');
+            setTimeout(function() { location.reload(); }, 1000);
+          } else {
+            showMessage('Error: ' + data.error, 'error');
+          }
+        })
+        .catch(function(e) { showMessage('Error refreshing data', 'error'); });
+    }
+
+    function clearCache() {
+      showMessage('Clearing cache...', 'info');
+      fetch('/admin/cache/clear?key=' + adminKey, { method: 'POST' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            showMessage('Cache cleared successfully!', 'success');
+            setTimeout(function() { location.reload(); }, 1000);
+          }
+        })
+        .catch(function(e) { showMessage('Error clearing cache', 'error'); });
+    }
+
+    function showMessage(msg, type) {
+      var el = document.getElementById('admin-message');
+      el.style.display = 'block';
+      el.className = type === 'error' ? 'form-error' : type === 'success' ? 'form-success' : '';
+      el.style.background = type === 'info' ? 'rgba(59, 130, 246, 0.1)' : undefined;
+      el.style.borderColor = type === 'info' ? 'rgba(59, 130, 246, 0.3)' : undefined;
+      el.style.color = type === 'info' ? '#3b82f6' : undefined;
+      el.textContent = msg;
+    }
+  </script>
+</body>
+</html>

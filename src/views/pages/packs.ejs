@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main id="main-content">
+    <div class="page-hero">
+      <h1>Texture Packs</h1>
+      <p>Browse all available Better Bedwars texture packs.</p>
+    </div>
+
+    <section class="section">
+      <!-- Search -->
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" class="search-input" id="pack-search" placeholder="Search packs..." aria-label="Search packs">
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all" onclick="filterPacks('all', this)">All</button>
+        <button class="filter-btn" data-filter="java" onclick="filterPacks('java', this)">Java</button>
+        <button class="filter-btn" data-filter="bedrock" onclick="filterPacks('bedrock', this)">Bedrock</button>
+        <button class="filter-btn" data-filter="featured" onclick="filterPacks('featured', this)">Featured</button>
+      </div>
+
+      <!-- Featured Packs -->
+      <% if (featuredPacks && featuredPacks.length > 0) { %>
+      <div class="mb-4">
+        <p class="section-title">Featured</p>
+        <div class="packs-grid" id="featured-packs">
+          <% featuredPacks.forEach(function(pack) { 
+            var slug = pack.slug || pack.name.toLowerCase().replace(/\s+/g, '-');
+          %>
+          <div class="pack-card" data-edition="<%= pack.edition ? pack.edition.join(' ') : 'java' %>" data-featured="true">
+            <% if (pack.thumbnail) { %>
+            <div class="pack-card-image">
+              <img src="<%= pack.thumbnail %>" alt="<%= pack.name %>" loading="lazy">
+            </div>
+            <% } else { %>
+            <div class="pack-card-image">
+              <div class="pack-card-placeholder"><%= pack.name %></div>
+            </div>
+            <% } %>
+            <div class="pack-card-body">
+              <h3 class="pack-card-title"><%= pack.name %></h3>
+              <p class="pack-card-desc"><%= truncate(pack.short_description || pack.description || '', 120) %></p>
+              <div class="pack-card-meta">
+                <span><%= pack.edition ? pack.edition.join(', ') : 'Java' %></span>
+                <% if (pack.supported_versions) { %>
+                <span>v<%= pack.supported_versions[0] || '1.8.9' %></span>
+                <% } %>
+              </div>
+              <a href="/packs/<%= slug %>" class="pack-card-link">View Details</a>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+      <% } %>
+
+      <!-- All Packs -->
+      <p class="section-title">All Packs</p>
+      <div class="packs-grid" id="all-packs">
+        <% if (packs && packs.length > 0) { %>
+          <% packs.forEach(function(pack) { 
+            var slug = pack.slug || pack.name.toLowerCase().replace(/\s+/g, '-');
+          %>
+          <div class="pack-card" data-edition="<%= pack.edition ? pack.edition.join(' ') : 'java' %>" data-featured="<%= pack.featured ? 'true' : 'false' %>">
+            <% if (pack.thumbnail) { %>
+            <div class="pack-card-image">
+              <img src="<%= pack.thumbnail %>" alt="<%= pack.name %>" loading="lazy">
+            </div>
+            <% } else { %>
+            <div class="pack-card-image">
+              <div class="pack-card-placeholder"><%= pack.name %></div>
+            </div>
+            <% } %>
+            <div class="pack-card-body">
+              <h3 class="pack-card-title"><%= pack.name %></h3>
+              <p class="pack-card-desc"><%= truncate(pack.short_description || pack.description || '', 120) %></p>
+              <div class="pack-card-meta">
+                <span><%= pack.edition ? pack.edition.join(', ') : 'Java' %></span>
+                <% if (pack.supported_versions) { %>
+                <span>v<%= pack.supported_versions[0] || '1.8.9' %></span>
+                <% } %>
+              </div>
+              <a href="/packs/<%= slug %>" class="pack-card-link">View Details</a>
+            </div>
+          </div>
+          <% }); %>
+        <% } else { %>
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-state-icon">&#128230;</div>
+            <p class="empty-state-text">No packs available yet.</p>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>
