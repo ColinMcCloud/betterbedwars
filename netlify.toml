@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "https://discord.betterbedwars.com/*"
+  to = "https://discord.gg/jADnherbZS"
+  status = 301
+  force = true
