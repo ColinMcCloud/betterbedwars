@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page not found | Better Bedwars.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #121212;
+    --fg: #ffffff;
+    --muted: #cccccc;
+    --mono: "Space Mono", "Courier New", monospace;
+    --body: "DM Sans", Arial, sans-serif;
+    --s: 6px; /* size of one texture pixel */
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    line-height: 1.6;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+  main { width: 100%; max-width: 560px; }
+
+  /* Top-view bed (pillow on the left). The breaking animation (1s) runs through its 10 destroy stages, the bed shakes,
+     then it breaks into pieces with a burst of pixels. Plays once on load. */
+  .bed { position: relative; width: calc(32 * var(--s)); height: calc(16 * var(--s)); margin: 0 0 40px; }
+  .bed .chunk {
+    position: absolute;
+    top: 0;
+    width: calc(8 * var(--s));
+    height: calc(16 * var(--s));
+    overflow: hidden;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAD+ElEQVR4nJWVzXJcNw6FPwDkvbf/5G7LcjlVmcWs5kn8IPOEfhTPLJK9k9TURLZbUqv7/pJAFm2Xt9FZsYoEcXBwSMiHDx/ieDwiIrx584a7uzvGsWccR1zgcPk3lhNiRkQgIgCICO5OhKN63QNQ1es6GyYCqkSpMBUUfsQuhYGGdDqdeP/+Pd3uhtv9KxSYpoH7+3t++fW/rJs1/3p7h0aPxIKIUAWSGlM/E6GoBREVcwgBMaXdrhmXhZiEMEjbIJaJEAjJVFF+fVhItQa7Vwd2uy3PT080TQM4h9cHzEHESDFTl0okpe06VIAC3bbDo2J2rWyZZhKKe8VLoGLkdaa6k5JQaWCu4ILkTD45KaIixVGCeZ5xdzabHSKF03DhXSeEVcIDAoZhQESuSowLEUqbE+6F4k4BRIVkLVKC8dzjHlRTnIp4ECqkxgFITdOwvdnw/PxM27bXi5eZoe9Z5Yb4HlQdTUa36lgig46IQF0W5pgQ/Sb1N6/MUdDO0JxppCGWhawNUZyolaUUIoK03+85PZ8AOBwOAHw5fmW932HNGipoNnQCKc74dEY8oa8zL8HyfIFkiEFUJ3crYEbNjNVqRVl+HN6udpRhoU4Fr854PlNKoYbQrW+wVfui5AApZ5pdhxRHSuAP56sCADllJF34/PUL2RL91OMoFi2iQk4NRSpZBW52pGliicuLCBSDVCqaDbcCnq7ElmXh4fRISiv2N2sigmZo6No1v/AfIoIyTiBCEaH+/x73SuogZgFXVBQ1p3l3iw1O7c9EcdwDBTwKtTq2yjA4uOPuQCaZGSlnoPDl+JWkRj/1vFl1iBmyVGSYCVVKDEST0DbDVby/jX5pkC9PFHckFFsq5vmqwG634/P9A+/e3l770iuKM/uF1Kzp/vmaOg8AaA2IRFnOLyKw37ZYHFCDcEGalvjjiaSqDP3Aq/2GyzSyzDPTZYJQVs2Wuc48f/pE03TUZDS7NRHji5IDhA+gwthPRATx52eQHWmaJobLhbu7OyrBpu2IDUzzyFyFENj89BPTuSfJ1Q/JEmgGrVAK1RfUMuV/R8aoJDE8Bbpp8H4iotC2LcP5ggaoJNp//Ez8/kja7XZst1tOpxM5Z0QENTDLlOqIwTRcUIJQJX97gl7BLCFtpmmUyA36+IQcbpHjI+3hFhdYThPETL9MbF7tqdXxOjOM178nATw8PJBzZp5nzAwzoe8fmaaJ2MAAbKoQtbDMhXDHrKOaoDhLcYIZDfDjE0owHJ9A7ErSgxzC/NxTBVwgrAMmkojw8eNHVJVhGJhqYbvpoAp5EyQv/PZwNV7E91FswEBQIRKgQP3Wbf/uexCHSIj8GNffYXYhMfIXktNXPeCdHuEAAAAASUVORK5CYII=) no-repeat;
+    background-size: calc(32 * var(--s)) calc(16 * var(--s));
+    image-rendering: pixelated;
+    transform-origin: 50% 100%;
+    animation: shatter 1.7s ease-out both;
+  }
+  .bed .c0 { left: 0;                   background-position: 0 0;                    --ox: 12;   --dx: -30px; --dy: 12px; --r: -14deg; }
+  .bed .c1 { left: calc(8 * var(--s));  background-position: calc(-8 * var(--s)) 0;  --ox: 4;  --dx: -10px; --dy: 20px; --r: 7deg; }
+  .bed .c2 { left: calc(16 * var(--s)); background-position: calc(-16 * var(--s)) 0; --ox: -4; --dx: 12px;  --dy: 16px; --r: -6deg; }
+  .bed .c3 { left: calc(24 * var(--s)); background-position: calc(-24 * var(--s)) 0; --ox: -12; --dx: 32px;  --dy: 8px;  --r: 11deg; }
+  /* the destroy-stage overlay (10 frames, 16x16 each), placed over the bed's breaking animation spot */
+  .bed .o {
+    position: absolute;
+    top: 0;
+    left: calc(var(--ox) * var(--s));
+    width: calc(16 * var(--s));
+    height: calc(16 * var(--s));
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAAQCAYAAACRBXRYAAAA1UlEQVR4nO2ZoQ6DMBRFXxd+AYMYdsih+X/PT2Cwa6kZTEEQKw+WkBeycxTQnFvEDS2pm6ZJAKy4Wb8A/DcUEEyhgGAKBQRTsvmiKIpDfyNd17n1PT7+L362fpjnubRt674r+mTlvZQwBDUj5T+qSgYf1IyUX9dPCUNUM1J+0zQSglcztnwRUTM0X8vY429l7PVTGUd8EZEYo7y8XzL6vl/GWILhdN5j+uNIAeF0nIzJMQoIp7O1OXTzSchVN7H41/YdR3FgCUswmEIBwRQKCKZQQDDlA7Dr3xF6YFOxAAAAAElFTkSuQmCC) no-repeat 0 0;
+    background-size: calc(160 * var(--s)) calc(16 * var(--s));
+    image-rendering: pixelated;
+    animation: stages 1s steps(9) both;
+  }
+  @keyframes stages { to { background-position: calc(-144 * var(--s)) 0; } }
+  @keyframes shatter {
+    0%, 59% { transform: none; }
+    63% { transform: translateX(-2px); }
+    67% { transform: translateX(2px); }
+    70% { transform: translateX(-2px); }
+    72% { transform: none; }
+    84% { transform: translate(calc(var(--dx) * .6), calc(var(--dy) * .6 - 12px)) rotate(calc(var(--r) * .6)); }
+    100% { transform: translate(var(--dx), var(--dy)) rotate(var(--r)); }
+  }
+  .bed .p {
+    position: absolute;
+    left: var(--l);
+    top: var(--t);
+    width: calc(var(--s) * .9);
+    height: calc(var(--s) * .9);
+    background: var(--c);
+    opacity: 0;
+    animation: burst .5s cubic-bezier(.2,.7,.4,1) 1.2s both;
+  }
+  @keyframes burst {
+    0% { opacity: 0; transform: none; }
+    6% { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--x), var(--y)); }
+  }
+
+  /* Legs start hidden under the bed (never visible in the top view). When the bed breaks
+     apart they get thrown out with the pieces. */
+  .bed .chunk { z-index: 2; }
+  .bed .p { z-index: 3; }
+  .bed .leg {
+    position: absolute;
+    z-index: 1;
+    left: calc(var(--px) * var(--s));
+    top: calc(var(--py) * var(--s));
+    width: calc(3 * var(--s));
+    height: calc(3 * var(--s));
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAMElEQVR4nGNc2Oj7n4ubh+Hrly8MTEwsjAysbGwMDAwMDEx/f/9n+P3rF8O/f/8ZAPAyDmtnEHRYAAAAAElFTkSuQmCC) no-repeat 0 0 / 100% 100%;
+    image-rendering: pixelated;
+    animation: legfall 1.7s both;
+  }
+  /* --lx / --ly / --lr: how far (in texture pixels) and how much each leg travels */
+  .bed .l1 { --px: 1;  --py: 0;  --lx: -5; --ly: 18; --lr: -12deg; }
+  .bed .l2 { --px: 1;  --py: 13; --lx: -1; --ly: 5;  --lr: 8deg; }
+  .bed .l3 { --px: 28; --py: 0;  --lx: 1;  --ly: 18; --lr: 12deg; }
+  .bed .l4 { --px: 28; --py: 13; --lx: 5;  --ly: 5;  --lr: -8deg; }
+  @keyframes legfall {
+    0%, 72% { transform: none; animation-timing-function: ease-out; }
+    84% { transform: translate(calc(var(--lx) * var(--s) * .4), calc(var(--s) * -1.5)) rotate(calc(var(--lr) * .4)); animation-timing-function: ease-in; }
+    100% { transform: translate(calc(var(--lx) * var(--s)), calc(var(--ly) * var(--s))) rotate(var(--lr)); }
+  }
+
+    .code { display: block; width: clamp(170px, 58vw, 300px); height: auto; margin: 0 0 24px; }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 8px; }
+  p { color: var(--muted); margin: 0 0 32px; max-width: 46ch; }
+  a.btn {
+    display: inline-block;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--bg);
+    background: var(--fg);
+    text-decoration: none;
+    padding: 12px 20px;
+    border: 2px solid var(--fg);
+  }
+  a.btn:hover { background: var(--bg); color: var(--fg); }
+  a.btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+
+  @media (max-width: 340px) { :root { --s: 4px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .bed .chunk { animation: none; transform: translate(var(--dx), var(--dy)) rotate(var(--r)); }
+    .bed .o { animation: none; background-position: calc(-144 * var(--s)) 0; }
+    .bed .leg { animation: none; transform: translate(calc(var(--lx) * var(--s)), calc(var(--ly) * var(--s))) rotate(var(--lr)); }
+    .bed .p { display: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="bed" role="img" aria-label="A broken bed"><span class="chunk c0"><b class="o"></b></span><span class="chunk c1"><b class="o"></b></span><span class="chunk c2"><b class="o"></b></span><span class="chunk c3"><b class="o"></b></span><i class="leg l1"></i><i class="leg l2"></i><i class="leg l3"></i><i class="leg l4"></i><i class="p" style="--l:calc(6 * var(--s));--t:calc(3 * var(--s));--c:#f8c52a;--x:-40px;--y:-30px"></i><i class="p" style="--l:calc(14 * var(--s));--t:calc(2 * var(--s));--c:#f8c52a;--x:-10px;--y:-46px"></i><i class="p" style="--l:calc(22 * var(--s));--t:calc(3 * var(--s));--c:#fff;--x:16px;--y:-44px"></i><i class="p" style="--l:calc(28 * var(--s));--t:calc(4 * var(--s));--c:#f8c52a;--x:44px;--y:-28px"></i><i class="p" style="--l:calc(4 * var(--s));--t:calc(8 * var(--s));--c:#d8d8d8;--x:-50px;--y:6px"></i><i class="p" style="--l:calc(20 * var(--s));--t:calc(8 * var(--s));--c:#383838;--x:6px;--y:36px"></i><i class="p" style="--l:calc(26 * var(--s));--t:calc(9 * var(--s));--c:#f8c52a;--x:40px;--y:22px"></i><i class="p" style="--l:calc(12 * var(--s));--t:calc(12 * var(--s));--c:#383838;--x:-24px;--y:34px"></i><i class="p" style="--l:calc(18 * var(--s));--t:calc(13 * var(--s));--c:#f8c52a;--x:22px;--y:40px"></i><i class="p" style="--l:calc(8 * var(--s));--t:calc(5 * var(--s));--c:#fff;--x:-30px;--y:-10px"></i></div>
+  <svg class="code" viewBox="0 0 25 7" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M0 0h2v1h-2zM4 0h2v1h-2zM0 1h2v1h-2zM4 1h2v1h-2zM0 2h2v1h-2zM4 2h2v1h-2zM0 3h7v1h-7zM0 4h7v1h-7zM4 5h2v1h-2zM4 6h2v1h-2zM10 0h5v1h-5zM9 1h7v1h-7zM9 2h2v1h-2zM14 2h2v1h-2zM9 3h2v1h-2zM14 3h2v1h-2zM9 4h2v1h-2zM14 4h2v1h-2zM9 5h7v1h-7zM10 6h5v1h-5zM18 0h2v1h-2zM22 0h2v1h-2zM18 1h2v1h-2zM22 1h2v1h-2zM18 2h2v1h-2zM22 2h2v1h-2zM18 3h7v1h-7zM18 4h7v1h-7zM22 5h2v1h-2zM22 6h2v1h-2z"/></svg>
+  <h1>Page not found</h1>
+  <p>This page doesn't exist or has been moved. Check the address, or go back to the main site.</p>
+  <a class="btn" href="/">Back to home</a>
+</main>
+</body>
+</html>
